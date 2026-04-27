@@ -5,28 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Branch extends Model
+class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'name',
-        'address',
-        'phone',
-        'email',
-        'photo',
-        'city',
-        'latitude',
-        'longitude',
-        'radius',
-        'office_type',
+        'sku',
+        'price_buy',
+        'price_sell',
+        'min_stock',
         'status',
     ];
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
+    protected $casts = [
+        'price_buy' => 'decimal:2',
+        'price_sell' => 'decimal:2',
+    ];
 
     public function stocks()
     {

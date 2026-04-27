@@ -37,6 +37,9 @@ class DatabaseSeeder extends Seeder
             'branch_id' => $branchB->id,
         ]);
 
+        // Tambahkan seeder produk
+        $this->call(ProductSeeder::class);
+
         User::factory()->create([
             'name' => 'Finance Admin',
             'email' => 'finance@example.com',

@@ -48,7 +48,7 @@
                 Dashboard
             </a>
 
-            <a href="#" class="flex items-center px-4 py-3 rounded-3xl  hover:bg-slate-800 hover:text-white transition">
+            <a href="{{ route('products.index') }}" class="flex items-center px-4 py-3 rounded-3xl  hover:bg-slate-800 hover:text-white transition">
                 <span class="material-symbols-outlined"> view_in_ar </span><span class="ml-3 text-ms">Produk</span>
             </a>
 
@@ -63,8 +63,11 @@
             </a>
 
             @if(in_array($role, ['owner', 'manager', 'warehouse']))
-                <a href="#" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
-                    <span class="material-symbols-outlined">view_comfy_alt</span><span class="ml-3 text-ms">Gudang</span>
+                <a href="{{ route('stocks.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <span class="material-symbols-outlined">view_comfy_alt</span><span class="ml-3 text-ms">Stok</span>
+                </a>
+                <a href="{{ route('stock-movements.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                    <span class="material-symbols-outlined">timeline</span><span class="ml-3 text-ms">Riwayat Stok</span>
                 </a>
             @endif
 
