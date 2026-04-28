@@ -48,7 +48,7 @@ class PurchaseRequestController extends Controller
             ]);
         }
 
-        return back()->with('success', 'PR berhasil dibuat');
+        return back()->with('success', 'Purchase Request berhasil dibuat');
     }
 
     // Approve
@@ -66,7 +66,7 @@ class PurchaseRequestController extends Controller
         }
 
         if ($pr->status !== 'pending') {
-            return back()->with('error', 'PR sudah diproses');
+            return back()->with('error', 'Purchase Request sudah diproses');
         }
 
         $pr->update([
@@ -75,7 +75,7 @@ class PurchaseRequestController extends Controller
             'approved_at' => now()
         ]);
 
-        return back()->with('success', 'PR disetujui');
+        return back()->with('success', 'Purchase Request disetujui');
     }
 
     // Reject
@@ -93,7 +93,7 @@ class PurchaseRequestController extends Controller
         }
 
         if ($pr->status !== 'pending') {
-            return back()->with('error', 'PR sudah diproses');
+            return back()->with('error', 'Purchase Request sudah diproses');
         }
 
         $pr->update([
@@ -103,6 +103,6 @@ class PurchaseRequestController extends Controller
             'approval_note' => $request->note
         ]);
 
-        return back()->with('success', 'PR ditolak');
+        return back()->with('success', 'Purchase Request ditolak');
     }
 }
