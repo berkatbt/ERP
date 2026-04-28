@@ -12,7 +12,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -27,7 +27,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -49,7 +49,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -68,7 +68,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -90,7 +90,7 @@ class ProductController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 

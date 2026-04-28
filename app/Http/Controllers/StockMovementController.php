@@ -15,7 +15,7 @@ class StockMovementController extends Controller
     {
         // Authorization
         $user = auth()->user();
-        if (!$user || !in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (!$user || !in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 

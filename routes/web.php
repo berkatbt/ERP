@@ -1,12 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMovementController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,11 +45,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/finance', function () { 
         return view('dashboard.finance'); 
-    })->middleware('role:finance')->name('dashboard.finance');
+    })->middleware('role:finance admin')->name('dashboard.finance');
 
     Route::get('/warehouse', function () { 
         return view('dashboard.warehouse'); 
-    })->middleware('role:warehouse')->name('dashboard.warehouse');
+    })->middleware('role:warehouse admin')->name('dashboard.warehouse');
 
     Route::get('/cashier', function () { 
         return view('dashboard.cashier'); 
@@ -59,10 +60,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('purchase-requests')
         ->name('purchase-requests.')
         ->group(function () {
-            Route::get('/', [\App\Http\Controllers\PurchaseRequestController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('store');
-            Route::post('/{id}/approve', [\App\Http\Controllers\PurchaseRequestController::class, 'approve'])->name('approve');
-            Route::post('/{id}/reject', [\App\Http\Controllers\PurchaseRequestController::class, 'reject'])->name('reject');
+            Route::get('/', [PurchaseRequestController::class, 'index'])->name('index');
+            Route::post('/', [PurchaseRequestController::class, 'store'])->name('store');
+            Route::post('/{id}/approve', [PurchaseRequestController::class, 'approve'])->name('approve');
+            Route::post('/{id}/reject', [PurchaseRequestController::class, 'reject'])->name('reject');
         });
 
     // Audit Log Routes - Owner & Manager only
@@ -87,7 +88,7 @@ Route::middleware('auth')->group(function () {
     // Product Management Routes - Owner, Manager, Warehouse
     Route::prefix('products')
         ->name('products.')
-        ->middleware('role:owner,manager,warehouse')
+        ->middleware('role:owner,manager,warehouse admin')
         ->group(function () {
             Route::get('/', [ProductController::class, 'index'])->name('index');
             Route::post('/', [ProductController::class, 'store'])->name('store');
@@ -99,7 +100,7 @@ Route::middleware('auth')->group(function () {
     // Stock Management Routes - Owner, Manager, Warehouse
     Route::prefix('stocks')
         ->name('stocks.')
-        ->middleware('role:owner,manager,warehouse')
+        ->middleware('role:owner,manager,warehouse admin')
         ->group(function () {
             Route::get('/', [StockController::class, 'index'])->name('index');
             Route::post('/', [StockController::class, 'store'])->name('store');
@@ -111,7 +112,7 @@ Route::middleware('auth')->group(function () {
     // Stock Movement History Routes - Owner, Manager, Warehouse
     Route::prefix('stock-movements')
         ->name('stock-movements.')
-        ->middleware('role:owner,manager,warehouse')
+        ->middleware('role:owner,manager,warehouse admin')
         ->group(function () {
             Route::get('/', [StockMovementController::class, 'index'])->name('index');
             Route::get('/summary', [StockMovementController::class, 'summary'])->name('summary');

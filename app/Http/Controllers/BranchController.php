@@ -12,7 +12,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -27,7 +27,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || strtolower($user->role) !== 'owner') {
+        if (! $user || strtolower($user->role->name) !== 'owner') {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -60,7 +60,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -73,7 +73,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -100,7 +100,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || strtolower($user->role) !== 'owner') {
+        if (! $user || strtolower($user->role->name) !== 'owner') {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -124,7 +124,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || strtolower($user->role) !== 'owner') {
+        if (! $user || strtolower($user->role->name) !== 'owner') {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -161,7 +161,7 @@ class BranchController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || strtolower($user->role) !== 'owner') {
+        if (! $user || strtolower($user->role->name) !== 'owner') {
             abort(403, 'Akses tidak diizinkan.');
         }
 

@@ -43,14 +43,14 @@ class AuthController extends Controller
             ]);
 
             // redirect berdasarkan role
-            switch (strtolower($user->role)) {
+            switch (strtolower($user->role->name)) {
                 case 'owner':
                     return redirect('/owner');
                 case 'manager':
                     return redirect('/manager');
-                case 'finance':
+                case 'finance admin':
                     return redirect('/finance');
-                case 'warehouse':
+                case 'warehouse admin':
                     return redirect('/warehouse');
                 case 'cashier':
                     return redirect('/cashier');

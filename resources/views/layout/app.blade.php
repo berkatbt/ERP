@@ -28,7 +28,7 @@
 
         @auth
         @php
-            $role = strtolower(Auth::user()->role ?? '');
+            $role = strtolower(Auth::user()->role->name ?? '');
             $roleLabelMap = [
                 'owner' => 'Owner',
                 'manager' => 'Manager',
@@ -53,7 +53,7 @@
             </a>
 
             @unless($role === 'cashier')
-                <a href="#" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
+                <a href="{{ route('purchase-requests.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="material-symbols-outlined">remove_shopping_cart</span><span class="ml-3 text-ms">Pembelian</span>
                 </a>
             @endunless
@@ -62,7 +62,7 @@
                 <span class="material-symbols-outlined">shopping_bag</span><span class="ml-3 text-ms">Penjualan</span>
             </a>
 
-            @if(in_array($role, ['owner', 'manager', 'warehouse']))
+            @if(in_array($role, ['owner', 'manager', 'warehouse admin']))
                 <a href="{{ route('stocks.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="material-symbols-outlined">view_comfy_alt</span><span class="ml-3 text-ms">Stok</span>
                 </a>
@@ -71,7 +71,7 @@
                 </a>
             @endif
 
-            @if(in_array($role, ['owner', 'manager', 'finance']))
+            @if(in_array($role, ['owner', 'manager', 'finance admin']))
                 <a href="#" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="material-symbols-outlined">payments</span><span class="ml-3 text-ms">Keuangan</span>
                 </a>

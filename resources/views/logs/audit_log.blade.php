@@ -29,7 +29,7 @@
                     <tr class="hover:bg-slate-900/80 transition">
                         <td class="px-4 py-3">{{ $log->created_at->timezone(config('app.timezone'))->format('d/m/Y H:i') }}</td>
                         <td class="px-4 py-3">{{ optional($log->user)->name ?? 'System' }}</td>
-                        <td class="px-4 py-3">{{ optional($log->user)->role ? ucfirst(optional($log->user)->role) : '-' }}</td>
+                        <td class="px-4 py-3">{{ optional($log->user)->role->name ? ucfirst(optional($log->user)->role->name) : '-' }}</td>
                         <td class="px-4 py-3 capitalize">{{ $log->action }}</td>
                         <td class="px-4 py-3">{{ $log->ip_address ?? '-' }}</td>
                         <td class="px-4 py-3 break-words">{{ $log->url ?? '-' }}</td>

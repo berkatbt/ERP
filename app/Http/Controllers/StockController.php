@@ -18,7 +18,7 @@ class StockController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -55,7 +55,7 @@ class StockController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -94,7 +94,7 @@ class StockController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -115,7 +115,7 @@ class StockController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager', 'warehouse'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager', 'warehouse admin'])) {
             abort(403, 'Akses tidak diizinkan.');
         }
 
@@ -156,7 +156,7 @@ class StockController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user || ! in_array(strtolower($user->role), ['owner', 'manager'])) {
+        if (! $user || ! in_array(strtolower($user->role->name), ['owner', 'manager'])) {
             abort(403, 'Akses tidak diizinkan. Hanya Manager atau Owner yang dapat menghapus stok.');
         }
 

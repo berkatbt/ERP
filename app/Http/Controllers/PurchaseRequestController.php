@@ -24,7 +24,7 @@ class PurchaseRequestController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role !== 'warehouse') {
+        if ($user->role->name !== 'Warehouse Admin') {
             abort(403, 'Hanya warehouse yang bisa membuat PR');
         }
 
@@ -57,11 +57,11 @@ class PurchaseRequestController extends Controller
         $user = auth()->user();
         $pr = PurchaseRequest::findOrFail($id);
 
-        if (!in_array($user->role, ['manager', 'owner'])) {
+        if (!in_array($user->role->name, ['manager', 'owner'])) {
             abort(403);
         }
 
-        if ($user->role === 'manager' && $pr->branch_id !== $user->branch_id) {
+        if ($user->role->name === 'manager' && $pr->branch_id !== $user->branch_id) {
             abort(403);
         }
 
@@ -84,11 +84,11 @@ class PurchaseRequestController extends Controller
         $user = auth()->user();
         $pr = PurchaseRequest::findOrFail($id);
 
-        if (!in_array($user->role, ['manager', 'owner'])) {
+        if (!in_array($user->role->name, ['manager', 'owner'])) {
             abort(403);
         }
 
-        if ($user->role === 'manager' && $pr->branch_id !== $user->branch_id) {
+        if ($user->role->name === 'manager' && $pr->branch_id !== $user->branch_id) {
             abort(403);
         }
 

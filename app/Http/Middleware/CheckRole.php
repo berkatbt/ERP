@@ -20,7 +20,7 @@ class CheckRole
             return redirect()->route('login');
         }
 
-        $userRole = strtolower(auth()->user()->role);
+        $userRole = strtolower(auth()->user()->role->name);
 
         // Owner memiliki akses ke semua route
         if ($userRole === 'owner') {
