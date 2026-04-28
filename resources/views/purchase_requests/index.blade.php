@@ -34,6 +34,7 @@
                             <th class="px-4 py-3">Nama Produk</th>
                             <th class="px-4 py-3">Harga Produk</th>
                             <th class="px-4 py-3">Quantity</th>
+                            <th class="px-4 py-3">Diajukan Oleh</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3">Aksi</th>
                         </tr>
@@ -45,6 +46,7 @@
                                     <td class="px-4 py-3 font-medium">{{ $d->product->name }}</td>
                                     <td class="px-4 py-3">Rp {{ number_format($d->product->price_buy, 0, ',', '.') }}</td>
                                     <td class="px-4 py-3">{{ $d->qty }}</td>
+                                    <td class="px-4 py-3">{{ $pr->user->name }}</td>
                                     <td class="px-4 py-3">
                                         <span class="inline-block px-2 py-1 text-xs rounded-full {{ $pr->status === 'aktif' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300' }}">
                                             {{ ucfirst($pr->status) }}
@@ -53,7 +55,7 @@
                                     <td class="px-4 py-3">
                                         <div class="flex gap-1">
                                             
-                                            {{-- @if(auth()->user()->role->name == 'manager' && $pr->status == 'pending') --}}
+                                            @if(auth()->user()->role->name == 'manager' && $pr->status == 'pending')
 
                                                 {{-- APPROVE --}}
                                                 <form method="POST" action="{{ route('purchase-requests.approve', $pr->id) }}">
@@ -71,7 +73,7 @@
                                                     </button>
                                                 </form>
 
-                                            {{-- @endif --}}
+                                            @endif
                                             <button onclick="openEditModal({{ $pr->id }})" title="Edit" class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 transition">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -166,12 +168,6 @@
 </div>
 
 @endif
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.min.js"></script>
 
 <script>
 let index = 1;
