@@ -25,6 +25,15 @@ class PurchaseRequest extends Model
         return $this->hasMany(PurchaseRequestDetail::class);
     }
 
+    public function tracking()
+    {
+        return $this->hasMany(TrackingPurchaseRequest::class)->orderBy('created_at', 'asc');
+    }
+    public function latestTracking()
+    {
+        return $this->hasOne(TrackingPurchaseRequest::class)->latestOfMany();
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

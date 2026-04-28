@@ -14,9 +14,7 @@ return new class extends Migration
             $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
             $table->string('status')->default('pending');
             $table->text('note')->nullable();
-            $table->foreignId('approved_by')->nullable()->constrained('users');
             $table->timestamp('approved_at')->nullable();
-            $table->text('approval_note')->nullable();
             $table->timestamps();
         });
     }

@@ -62,8 +62,9 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [PurchaseRequestController::class, 'index'])->name('index');
             Route::post('/', [PurchaseRequestController::class, 'store'])->name('store');
-            Route::post('/{id}/approve', [PurchaseRequestController::class, 'approve'])->name('approve');
-            Route::post('/{id}/reject', [PurchaseRequestController::class, 'reject'])->name('reject');
+            Route::get('/detail/{id}', [PurchaseRequestController::class, 'show'])->name('show');
+            Route::put('/update/{id}', [PurchaseRequestController::class, 'update'])->name('update');
+            Route::delete('/{id}', [PurchaseRequestController::class, 'destroy'])->name('destroy');
         });
 
     // Audit Log Routes - Owner & Manager only

@@ -4,19 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseRequest;
 use App\Models\Product;
+use App\Models\TrackingPurchaseRequest;
 use Illuminate\Http\Request;
 
 class PurchaseRequestController extends Controller
 {
     public function index()
     {
-        $prs = PurchaseRequest::with('details.product', 'user')
+        $prs = PurchaseRequest::with('details.product', 'user', 'tracking', 'latestTracking')
             ->latest()
             ->get();
 
         $products = Product::all();
 
         return view('purchase_requests.index', compact('prs', 'products'));
+    }
+
+    public function show($id)
+    {
+        $pr = PurchaseRequest::with([
+            'user',
+            'details.product',
+            'tracking'
+        ])->findOrFail($id);
+
+        return view('purchase_requests.show', compact('pr'));
     }
 
     // Warehouse buat PR
@@ -29,8 +41,8 @@ class PurchaseRequestController extends Controller
         }
 
         $request->validate([
-            'products.*.id' => 'required|exists:products,id',
-            'products.*.qty' => 'required|integer|min:1',
+            'product_id' => 'required|exists:products,id',
+            'qty' => 'required|integer|min:1',
             'note' => 'nullable|string'
         ]);
 
@@ -41,68 +53,80 @@ class PurchaseRequestController extends Controller
             'note' => $request->note
         ]);
 
-        foreach ($request->products as $item) {
-            $pr->details()->create([
-                'product_id' => $item['id'],
-                'qty' => $item['qty']
-            ]);
-        }
+        $pr->details()->create([
+            'product_id' => $request->product_id,
+            'qty' => $request->qty
+        ]);
+
+        // buat tracking
+        TrackingPurchaseRequest::create([
+            'purchase_request_id' => $pr->id,
+            'tracking' => 'Menunggu Approval'
+        ]);
 
         return back()->with('success', 'Purchase Request berhasil dibuat');
     }
 
-    // Approve
-    public function approve($id)
+    public function update(Request $request, $id)
     {
-        $user = auth()->user();
         $pr = PurchaseRequest::findOrFail($id);
 
-        if (!in_array($user->role->name, ['manager', 'owner'])) {
-            abort(403);
-        }
-
-        if ($user->role->name === 'manager' && $pr->branch_id !== $user->branch_id) {
-            abort(403);
-        }
-
-        if ($pr->status !== 'pending') {
-            return back()->with('error', 'Purchase Request sudah diproses');
-        }
-
         $pr->update([
-            'status' => 'approved',
-            'approved_by' => $user->id,
-            'approved_at' => now()
+            'note' => $request->note ?? $pr->note
         ]);
 
-        return back()->with('success', 'Purchase Request disetujui');
+        // approval dan rejected
+        if ($request->status == 'approved') {
+            $pr->update([
+                'status' => 'Approved',
+                'approved_at' => now()
+            ]);
+
+            TrackingPurchaseRequest::create([
+                'user_id' => auth()->user()->id,
+                'purchase_request_id' => $pr->id,
+                'tracking' => 'Diapprove oleh manager'
+            ]);
+        } else if ($request->status == 'rejected') {
+            $pr->update([
+                'status' => 'rejected',
+                'approved_at' => now()
+            ]);
+
+            TrackingPurchaseRequest::create([
+                'user_id' => auth()->user()->id,
+                'purchase_request_id' => $pr->id,
+                'tracking' => 'Ditolak oleh manager'
+            ]);
+        }
+
+        // update tracking
+        if ($request->tracking) {
+            TrackingPurchaseRequest::create([
+                'user_id' => auth()->user()->id,
+                'purchase_request_id' => $pr->id,
+                'tracking' => $request->tracking
+            ]);
+        }
+
+        // update detail
+        if ($request->product_id && $request->qty) {
+            $pr->details()->delete();
+    
+            $pr->details()->create([
+                'product_id' => $request->product_id,
+                'qty' => $request->qty
+            ]);
+        }
+
+        return back()->with('success', 'Purchase Request berhasil diupdate');
     }
 
-    // Reject
-    public function reject(Request $request, $id)
+    public function destroy($id) 
     {
-        $user = auth()->user();
         $pr = PurchaseRequest::findOrFail($id);
+        $pr->delete();
 
-        if (!in_array($user->role->name, ['manager', 'owner'])) {
-            abort(403);
-        }
-
-        if ($user->role->name === 'manager' && $pr->branch_id !== $user->branch_id) {
-            abort(403);
-        }
-
-        if ($pr->status !== 'pending') {
-            return back()->with('error', 'Purchase Request sudah diproses');
-        }
-
-        $pr->update([
-            'status' => 'rejected',
-            'approved_by' => $user->id,
-            'approved_at' => now(),
-            'approval_note' => $request->note
-        ]);
-
-        return back()->with('success', 'Purchase Request ditolak');
+        return back()->with('success', 'Purchase Request berhasil dihapus.');
     }
 }

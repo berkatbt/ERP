@@ -38,12 +38,13 @@
             ];
             $roleLabel = $roleLabelMap[$role] ?? ucfirst($role);
             $userInitial = strtoupper(substr(Auth::user()->name ?? '', 0, 1));
+            $roleUrl = explode(' ', $role)[0];
         @endphp
 
         <!-- MENU -->
         <nav class="flex-1 p-4 space-y-2 text-sm">
 
-            <a href="/{{ $role }}"
+            <a href="/{{ $roleUrl }}"
                class="flex items-center gap-3 px-4 py-3 rounded-3xl bg-slate-800 text-white font-semibold shadow-sm shadow-slate-900/40 transition hover:bg-slate-700">
                 Dashboard
             </a>
