@@ -87,6 +87,11 @@
                 <a href="#" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">Approval</a>
                 <a href="{{ route('branches.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">data perusahaan</a>
             @endif
+
+            @if ($role === 'owner')
+                <a href="{{ route('admin.user.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">User Management</a>
+                <a href="{{ route('admin.role.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">Role Management</a>
+            @endif
         </nav>
 
         <!-- PROFILE -->

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
@@ -55,6 +57,34 @@ Route::middleware('auth')->group(function () {
         return view('dashboard.cashier'); 
     })->middleware('role:cashier')->name('dashboard.cashier');
 
+
+
+    // User and Role Management - Owner Only
+    Route::prefix('admin')
+        ->name('admin.')
+        ->middleware('role:owner')
+        ->group(function () {
+            // User Management
+            Route::prefix('user')
+                ->name('user.')
+                ->group(function () {
+                    Route::get('/', [UserController::class, 'index'])->name('index');
+                    Route::post('/store', [UserController::class, 'store'])->name('store');
+                    Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+                    Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('destroy');
+                });
+            
+            // Role Management
+            Route::prefix('role')
+                ->name('role.')
+                ->group(function () {
+                    Route::get('/', [RoleController::class, 'index'])->name('index');
+                    Route::post('/store', [RoleController::class, 'store'])->name('store');
+                    Route::put('/update/{id}', [RoleController::class, 'update'])->name('update');
+                    Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('destroy');
+                });
+        })
+        ;
 
     // Purchase Request Routes
     Route::prefix('purchase-requests')
