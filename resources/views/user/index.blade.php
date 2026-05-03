@@ -53,7 +53,7 @@
                                 <div class="flex justify-center gap-2">
 
                                     {{-- EDIT --}}
-                                    <button onclick='openEditModal(@json($user))'
+                                    <button onclick='openEditModal(@json($user), (@json($user->role->name)))'
                                         class="bg-amber-500/20 px-3 py-1 rounded-lg">
                                         Edit
                                     </button>
@@ -182,13 +182,19 @@ function closeCreateModal() {
     document.getElementById('createModal').classList.add('hidden');
 }
 
-function openEditModal(user) {
+function openEditModal(user, role) {
     document.getElementById('editModal').classList.remove('hidden');
 
     document.getElementById('editName').value = user.name;
     document.getElementById('editEmail').value = user.email;
     document.getElementById('editRole').value = user.role_id;
     document.getElementById('editBranch').value = user.branch_id;
+
+    if (role === 'Owner') {
+        document.getElementById('editRole').classList.add('hidden');
+    } else {
+        document.getElementById('editRole').classList.remove('hidden');
+    };
 
     document.getElementById('editForm').action = `/admin/user/update/${user.id}`;
 }
