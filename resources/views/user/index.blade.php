@@ -96,7 +96,9 @@
 
             <select name="role_id" class="w-full mb-3 px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl">
                 @foreach($roles as $role)
-                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @if ($role->name !== 'Owner')
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endif
                 @endforeach
             </select>
             <select name="branch_id" class="w-full mb-3 px-4 py-2 bg-slate-900 border border-slate-700 rounded-3xl">
@@ -132,7 +134,9 @@
             <select name="role_id" id="editRole"
                 class="w-full mb-3 px-4 py-2 rounded-3xl bg-slate-900 border border-slate-700">
                 @foreach($roles as $role)
-                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @if ($role->name !== 'Owner')
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                    @endif
                 @endforeach
             </select>
             <select name="branch_id" id="editBranch" class="w-full mb-3 px-4 py-2 rounded-3xl bg-slate-900 border border-slate-700">
