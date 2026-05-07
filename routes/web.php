@@ -7,6 +7,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
@@ -30,34 +33,31 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
-
 // Protected Routes - Authenticated Users Only
 Route::middleware('auth')->group(function () {
-    
-     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Dashboard Routes - Role-based
-    Route::get('/owner', function () { 
-        return view('dashboard.owner'); 
+    Route::get('/owner', function () {
+        return view('dashboard.owner');
     })->middleware('role:owner')->name('dashboard.owner');
 
-    Route::get('/manager', function () { 
-        return view('dashboard.manager'); 
+    Route::get('/manager', function () {
+        return view('dashboard.manager');
     })->middleware('role:manager')->name('dashboard.manager');
 
-    Route::get('/finance', function () { 
-        return view('dashboard.finance'); 
+    Route::get('/finance', function () {
+        return view('dashboard.finance');
     })->middleware('role:finance admin')->name('dashboard.finance');
 
-    Route::get('/warehouse', function () { 
-        return view('dashboard.warehouse'); 
+    Route::get('/warehouse', function () {
+        return view('dashboard.warehouse');
     })->middleware('role:warehouse admin')->name('dashboard.warehouse');
 
-    Route::get('/cashier', function () { 
-        return view('dashboard.cashier'); 
+    Route::get('/cashier', function () {
+        return view('dashboard.cashier');
     })->middleware('role:cashier')->name('dashboard.cashier');
-
-
 
     // User and Role Management - Owner Only
     Route::prefix('admin')
@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
                     Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
                     Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('destroy');
                 });
-            
+
             // Role Management
             Route::prefix('role')
                 ->name('role.')
@@ -83,8 +83,7 @@ Route::middleware('auth')->group(function () {
                     Route::put('/update/{id}', [RoleController::class, 'update'])->name('update');
                     Route::delete('/delete/{id}', [RoleController::class, 'destroy'])->name('destroy');
                 });
-        })
-        ;
+        });
 
     // Purchase Request Routes
     Route::prefix('purchase-requests')
@@ -147,6 +146,39 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             Route::get('/', [StockMovementController::class, 'index'])->name('index');
             Route::get('/summary', [StockMovementController::class, 'summary'])->name('summary');
+        });
+
+    Route::prefix('sales')
+        ->name('sales.')
+        ->middleware('role:owner,manager,warehouse admin,finance admin,cashier')
+        ->group(function () {
+
+            Route::get('/', [SaleController::class, 'index'])->name('index');
+            Route::post('/', [SaleController::class, 'store'])->name('store');
+
+        });
+
+    Route::prefix('sale-returns')
+        ->middleware(['auth', 'role:cashier'])
+        ->group(function () {
+
+            Route::post('/', [SaleReturnController::class, 'store'])->name('sale-returns.store');
+
+        });
+
+    Route::prefix('receivables')
+        ->middleware(['auth'])
+        ->group(function () {
+
+            Route::get('/', [ReceivableController::class, 'index'])
+                ->name('receivables.index');
+
+            Route::post('/{receivable}/pay', [ReceivableController::class, 'pay'])
+                ->name('receivables.pay');
+
+            Route::get('/receivables', [ReceivableController::class, 'index'])
+                ->name('receivables.index');
+
         });
 
 });

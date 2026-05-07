@@ -32,8 +32,8 @@
             $roleLabelMap = [
                 'owner' => 'Owner',
                 'manager' => 'Manager',
-                'finance' => 'Finance Admin',
-                'warehouse' => 'Warehouse Admin',
+                'finance admin' => 'Finance Admin',
+                'warehouse admin' => 'Warehouse Admin',
                 'cashier' => 'Cashier',
             ];
             $roleLabel = $roleLabelMap[$role] ?? ucfirst($role);
@@ -59,10 +59,11 @@
                 </a>
             @endunless
 
-            <a href="#" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
-                <span class="material-symbols-outlined">shopping_bag</span><span class="ml-3 text-ms">Penjualan</span>
+                <a href="{{ route('sales.index') }}" class="flex items-center px-4 py-3 rounded-3xl transition {{ request()->routeIs('sales.sales.*') ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+               <span class="material-symbols-outlined"> shopping_bag</span>
+               <span class="ml-3 text-ms">Penjualan</span>
             </a>
-
+            
             @if(in_array($role, ['owner', 'manager', 'warehouse admin']))
                 <a href="{{ route('stocks.index') }}" class="flex items-center px-4 py-3 rounded-3xl text-slate-300 hover:bg-slate-800 hover:text-white transition">
                     <span class="material-symbols-outlined">view_comfy_alt</span><span class="ml-3 text-ms">Stok</span>
