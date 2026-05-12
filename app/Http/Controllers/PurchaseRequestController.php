@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\PurchaseRequest;
 use App\Models\Product;
+use App\Models\Stock;
+use App\Models\StockMovement;
 use App\Models\TrackingPurchaseRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PurchaseRequestController extends Controller
@@ -116,6 +119,36 @@ class PurchaseRequestController extends Controller
             $pr->details()->create([
                 'product_id' => $request->product_id,
                 'qty' => $request->qty
+            ]);
+        }
+
+        if ($request->tracking === 'Selesai') {
+            $stock = Stock::where('product_id', $pr->detail->product_id)->where('branch_id', $pr->branch_id)->first();
+
+            if (!$stock) {
+                Stock::create([
+                    'product_id' => $pr->detail->product_id,
+                    'branch_id' => $pr->branch_id,
+                    'stock' => $pr->detail->qty,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+            } else {
+                $stock->update([
+                    'stock' => $stock->stock + $pr->detail->qty,
+                    'updated_at' => Carbon::now()
+                ]);
+            }
+
+            StockMovement::create([
+                'product_id' => $pr->detail->product_id,
+                'branch_id' => $pr->branch_id,
+                'type' => 'IN',
+                'qty' => $pr->detail->qty,
+                'reference' => 'Adjustment',
+                'reference_id' => $pr->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
         }
 

@@ -38,4 +38,9 @@ class PurchaseRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function stockMovement()
+    {
+        return $this->belongsTo(StockMovement::class);
+    }
 }

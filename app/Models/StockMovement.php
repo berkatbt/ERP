@@ -41,4 +41,9 @@ class StockMovement extends Model
     {
         return $this->type === 'IN' ? 'Masuk' : 'Keluar';
     }
+
+    public function purchaseRequest()
+    {
+        return $this->belongsTo(PurchaseRequest::class);
+    }
 }
