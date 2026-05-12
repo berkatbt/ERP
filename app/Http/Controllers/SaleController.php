@@ -33,10 +33,28 @@ class SaleController extends Controller
         }
 
         $products = Product::where('status', 'aktif')
+            ->with('stocks')
+            ->whereHas('stocks', function ($q) use ($user) {
+                $q->where('branch_id', $user->branch_id);
+            })
             ->orderBy('name')
+            ->get()
+            ->map(function ($product) {
+                $product->stock = $product->stocks->first();
+                unset($product->stocks);
+
+                return $product;
+            });
+
+        $sales = Sale::with('user')
+            ->latest()
+            ->limit(20)
             ->get();
 
-        return view('sales.index', compact('products'));
+        return view('sales.index', compact(
+            'products',
+            'sales'
+        ));
     }
 
     /**
@@ -106,7 +124,7 @@ class SaleController extends Controller
              */
             if ($request->payment_type === 'credit') {
 
-                \App\Models\Receivable::create([
+                Receivable::create([
                     'sale_id' => $sale->id,
                     'branch_id' => $user->branch_id,
                     'total_debt' => $total,
@@ -128,6 +146,7 @@ class SaleController extends Controller
 
                 // DETAIL SALE
                 $sale->details()->create([
+                    'sale_id' => $sale->id,
                     'product_id' => $product->id,
                     'qty' => $item['qty'],
                     'price' => $product->price_sell,

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sale_details_stable', function (Blueprint $table) {
+        Schema::create('sale_details', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('sale_id')->constrained()->cascadeOnDelete(); // Foreign key to sale table
             $table->foreignId('product_id')->constrained()->canscadeOnDelete(); // Foreign key to products table
 
-            $table->integer('aty');
+            $table->integer('qty');
             $table->decimal('price', 15, 2);
             $table->decimal('subtotal', 15, 2); 
 
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sale_details_stable');
+        Schema::dropIfExists('sale_details');
     }
 };

@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('sale_returns', function (Blueprint $table) {
             $table->id();
 
-            $table->foreign('sale_id')->constrained()->casecadeOnDelete();
-            $table->foreignId('user_id')->constrained(); // User yang membuat return
-            $table->foreignId('branch_id')->constrained(); // Cabang tempat return dilakukan
+            $table->foreignId('sale_id')->constrained('sales')->casecadeOnDelete();
+            $table->foreignId('user_id')->constrained('users'); // User yang membuat return
+            $table->foreignId('branch_id')->constrained('branches'); // Cabang tempat return dilakukan
 
             $table->string('reason')->nullable(); // Alasan return
 
