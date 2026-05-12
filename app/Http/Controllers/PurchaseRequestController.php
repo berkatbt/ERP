@@ -123,28 +123,29 @@ class PurchaseRequestController extends Controller
         }
 
         if ($request->tracking === 'Selesai') {
-            $stock = Stock::where('product_id', $pr->detail->product_id)->where('branch_id', $pr->branch_id)->first();
+            $productDetail = optional($pr->details->first());
+            $stock = Stock::where('product_id', $productDetail->product_id)->where('branch_id', $pr->branch_id)->first();
 
             if (!$stock) {
                 Stock::create([
-                    'product_id' => $pr->detail->product_id,
+                    'product_id' => $productDetail->product_id,
                     'branch_id' => $pr->branch_id,
-                    'stock' => $pr->detail->qty,
+                    'stock' => $productDetail->qty,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ]);
             } else {
                 $stock->update([
-                    'stock' => $stock->stock + $pr->detail->qty,
+                    'stock' => $stock->stock + $productDetail->qty,
                     'updated_at' => Carbon::now()
                 ]);
             }
 
             StockMovement::create([
-                'product_id' => $pr->detail->product_id,
+                'product_id' => $productDetail->product_id,
                 'branch_id' => $pr->branch_id,
                 'type' => 'IN',
-                'qty' => $pr->detail->qty,
+                'qty' => $productDetail->qty,
                 'reference' => 'Adjustment',
                 'reference_id' => $pr->id,
                 'created_at' => Carbon::now(),

@@ -9,8 +9,15 @@ class Sale extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function details()
     {
-        return $this->hasMany(\App\Models\SaleDetail::class);
+        return $this->hasMany(SaleDetail::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -46,7 +46,7 @@
                                     <td class="px-4 py-3">{{ $pr->user->name }}</td>
                                     <td class="px-4 py-3">{{ $pr->latestTracking->tracking }}</td>
                                     <td class="px-4 py-3">
-                                        <span class="inline-block px-2 py-1 text-xs rounded-full {{ $pr->status === 'approved' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300' }}">
+                                        <span class="inline-block px-2 py-1 text-xs rounded-full {{ $pr->status === 'Approved' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300' }}">
                                             {{ ucfirst($pr->status) }}
                                         </span>
                                     </td>
@@ -320,7 +320,7 @@ function openEditModal(pr) {
     `;
 
     document.getElementById('editNote').value = pr.note ?? '';
-    if (pr.latest_tracking.tracking.includes('Ditolak oleh manager', 'Menunggu Approval')) {
+    if (pr.latest_tracking.tracking.includes('Ditolak oleh manager', 'Menunggu Approval', 'Selesai')) {
         document.getElementById('editTracking').disabled = true;
     }
     document.getElementById('editTracking').value = pr.latest_tracking?.tracking ?? '';
