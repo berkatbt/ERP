@@ -6,6 +6,7 @@ use App\Models\Sale;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Receivable;
+use App\Models\AuditLog;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -153,14 +154,13 @@ class SaleController extends Controller
                     'subtotal' => $subtotal,
                 ]);
 
-                // UPDATE STOCK
+                // UPDATE STOCK + STOCK MOVEMENT
                 $stock = Stock::where('product_id', $product->id)
                     ->where('branch_id', $user->branch_id)
                     ->first();
 
-                $stock->decrement('stock', $item['qty']);
+                $oldStock = $stock->stock;
 
-                // STOCK MOVEMENT
                 $this->recordStockMovement(
                     $product->id,
                     $user->branch_id,
@@ -169,6 +169,24 @@ class SaleController extends Controller
                     'Penjualan',
                     $sale->id
                 );
+
+                $stock->refresh();
+
+                if ($oldStock > ($product->min_stock ?? 0) && $stock->stock <= ($product->min_stock ?? 0)) {
+                    AuditLog::create([
+                        'user_id' => $user->id,
+                        'branch_id' => $user->branch_id,
+                        'auditable_type' => Product::class,
+                        'auditable_id' => $product->id,
+                        'action' => 'stock_minimum',
+                        'description' => "Stok {$product->name} di cabang {$user->branch->name} telah mencapai minimum {$product->min_stock} unit.",
+                        'old_values' => ['stock' => $oldStock],
+                        'new_values' => ['stock' => $stock->stock],
+                        'url' => route('sales.index'),
+                        'ip_address' => request()->ip(),
+                        'user_agent' => request()->userAgent(),
+                    ]);
+                }
             }
 
             DB::commit();

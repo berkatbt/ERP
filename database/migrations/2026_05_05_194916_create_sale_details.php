@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('sale_details', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('sale_id')->constrained()->cascadeOnDelete(); // Foreign key to sale table
-            $table->foreignId('product_id')->constrained()->canscadeOnDelete(); // Foreign key to products table
+            $table->foreignId('sale_id')->constrained('sales')->cascadeOnDelete(); // Foreign key to sales table
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete(); // Foreign key to products table
 
             $table->integer('qty');
             $table->decimal('price', 15, 2);
-            $table->decimal('subtotal', 15, 2); 
+            $table->decimal('subtotal', 15, 2);
 
             $table->timestamps();
         });

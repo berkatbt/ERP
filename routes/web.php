@@ -8,6 +8,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\ReceivableController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\StockController;
@@ -156,6 +157,13 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [SaleController::class, 'index'])->name('index');
             Route::post('/', [SaleController::class, 'store'])->name('store');
 
+        });
+
+    Route::prefix('notifications')
+        ->name('notifications.')
+        ->middleware('auth')
+        ->group(function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('index');
         });
 
     Route::prefix('sale-returns')

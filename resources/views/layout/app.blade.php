@@ -132,11 +132,15 @@
             <div class="flex items-center gap-4">
 
                 <!-- NOTIF -->
-                <div class="relative cursor-pointer">
-                   <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
-                        2
-                    </span>
+                <div class="relative">
+                    <a href="{{ route('notifications.index') }}" class="relative text-white">
+                        <span class="material-symbols-outlined">notifications</span>
+                        @if(!empty($unreadNotificationCount) && $unreadNotificationCount > 0)
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
+                                {{ $unreadNotificationCount }}
+                            </span>
+                        @endif
+                    </a>
                 </div>
 
                 <!-- LOGOUT -->
